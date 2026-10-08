@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockups · Sigrid Ruttyn</title>
+<style>
+  :root{--bar:#1f2418;--fg:#e8ecdb;--muted:#9aa386;--on:#c5cfaa;--onInk:#1f2418;--stage:#d9d6cc}
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{display:grid;grid-template-rows:auto 1fr;background:var(--stage);font:400 14px/1.2 system-ui,sans-serif;color:var(--fg)}
+  .bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px 16px;background:var(--bar)}
+  .bar b{font:400 15px Georgia,serif;margin-right:auto;white-space:nowrap}
+  .seg{display:inline-flex;background:rgba(255,255,255,.07);border-radius:999px;padding:4px;gap:2px;flex-wrap:wrap}
+  .seg button{border:0;background:none;color:var(--muted);padding:8px 14px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
+  .seg button:hover{color:var(--fg)}
+  .seg button[aria-pressed="true"]{background:var(--on);color:var(--onInk)}
+  .seg kbd{font:11px ui-monospace,monospace;opacity:.55;margin-left:6px}
+  select{background:rgba(255,255,255,.07);color:var(--fg);border:0;border-radius:999px;padding:9px 14px;font:inherit;cursor:pointer}
+  select option{color:#000}
+  a.out{color:var(--muted);text-decoration:none;white-space:nowrap}
+  a.out:hover{color:var(--fg)}
+  .stage{display:grid;place-items:stretch;overflow:hidden;min-height:0}
+  .stage.mobile{place-items:center;padding:20px 0}
+  iframe{width:100%;height:100%;border:0;background:#111;display:block}
+  .mobile iframe{width:390px;height:min(844px,100%);border-radius:28px;box-shadow:0 0 0 10px #111,0 30px 60px -20px rgba(0,0,0,.5)}
+  :focus-visible{outline:2px solid var(--on);outline-offset:2px}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <b>Mockups sigridruttyn.be</b>
+    <div class="seg" id="designs" role="group" aria-label="Ontwerp">
+      <button data-d="stilte">Stilte<kbd>1</kbd></button>
+      <button data-d="wortel">Wortel<kbd>2</kbd></button>
+      <button data-d="draft">Huidige draft<kbd>3</kbd></button>
+    </div>
+    <select id="page" aria-label="Pagina">
+      <option value="index">Behandelingen (start)</option>
+      <option value="wie-ben-ik">Wie ben ik?</option>
+      <option value="lichaamswerk">Lichaamswerk</option>
+      <option value="allergie-behandeling">Allergie behandeling: TRM</option>
+      <option value="toegepaste-kinesiologie">Toegepaste kinesiologie</option>
+      <option value="praktische-info">Praktische info</option>
+      <option value="plan-je-afspraak">Plan je afspraak</option>
+      <option value="privacy">Privacyverklaring</option>
+    </select>
+    <div class="seg" id="device" role="group" aria-label="Schermgrootte">
+      <button data-dev="desktop">Desktop<kbd>D</kbd></button>
+      <button data-dev="mobile">Mobiel<kbd>M</kbd></button>
+    </div>
+    <a class="out" id="out" href="stilte/index.html" target="_blank" rel="noopener">Open los ↗</a>
+  </div>
+  <main class="stage" id="stage"><iframe id="frame" title="Mockup"></iframe></main>
+<script>
+  const designs = [...document.querySelectorAll('#designs button')];
+  const devices = [...document.querySelectorAll('#device button')];
+  const frame = document.getElementById('frame'), stage = document.getElementById('stage'), out = document.getElementById('out'), pageSel = document.getElementById('page');
+  const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} } };
+  const onServer = location.protocol.startsWith('http');
+  const base = onServer ? '/mockups/' : '';
+  if (!onServer) designs[2].hidden = true; // the current draft only runs on the dev server
+
+  let design = 'stilte', page = 'index';
+  const urlFor = (d, p) => d === 'draft' ? (p === 'index' ? '/' : `/${p}/`) : `${base}${d}/${p}.html`;
+  // Work out which design + page the frame is showing, so switching design keeps the page.
+  function readFrame() {
+    try {
+      const path = frame.contentWindow.location.pathname;
+      let m = path.match(/\/(stilte|wortel)\/([\w-]+)\.html$/);
+      if (m) return { d: m[1], p: m[2] };
+      if (onServer && !path.startsWith('/mockups')) { const s = path.replace(/^\/|\/$/g, ''); return { d: 'draft', p: s || 'index' }; }
+    } catch {}
+    return null;
+  }
+  function sync() {
+    designs.forEach(b => b.setAttribute('aria-pressed', b.dataset.d === design));
+    pageSel.value = page;
+    out.href = urlFor(design, page);
+    store.set('mk', JSON.stringify({ design, page }));
+    history.replaceState(null, '', `#${design}/${page}`);
+  }
+  function go(d, p) {
+    design = d; page = p;
+    const src = urlFor(d, p);
+    if (frame.getAttribute('src') !== src) frame.src = src;
+    sync();
+  }
+  frame.addEventListener('load', () => { const s = readFrame(); if (s) { design = s.d; page = s.p; sync(); } });
+  designs.forEach(b => b.addEventListener('click', () => { if (!b.hidden) go(b.dataset.d, page); }));
+  pageSel.addEventListener('change', () => go(design, pageSel.value));
+  function device(name) {
+    devices.forEach(d => d.setAttribute('aria-pressed', d.dataset.dev === name));
+    stage.classList.toggle('mobile', name === 'mobile');
+    store.set('mkdev', name);
+  }
+  devices.forEach(b => b.addEventListener('click', () => device(b.dataset.dev)));
+  addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select')) return;
+    const n = ['1', '2', '3'].indexOf(e.key);
+    if (n >= 0 && !designs[n].hidden) go(designs[n].dataset.d, page);
+    if (e.key.toLowerCase() === 'd') device('desktop');
+    if (e.key.toLowerCase() === 'm') device('mobile');
+  });
+  const fromHash = location.hash.slice(1).split('/');
+  let saved = {}; try { saved = JSON.parse(store.get('mk') || '{}'); } catch {}
+  const d0 = ['stilte', 'wortel', 'draft'].includes(fromHash[0]) ? fromHash[0] : (saved.design || 'stilte');
+  const p0 = fromHash[1] || saved.page || 'index';
+  go(!onServer && d0 === 'draft' ? 'stilte' : d0, p0);
+  device(store.get('mkdev') || 'desktop');
+</script>
+</body>
+</html>

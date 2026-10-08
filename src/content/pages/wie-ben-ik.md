@@ -1,7 +1,7 @@
 ---
 title: Wie ben ik?
 subtitle: Kinesist en lichaamswerker met een fascinatie voor de wijsheid van het lichaam
-image: ""
+image: /images/sigrid.jpg
 imageAlt: Portret van Sigrid Ruttyn
 ---
 

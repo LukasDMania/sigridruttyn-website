@@ -25,6 +25,11 @@ npm run dev      # http://localhost:4321
 npm run build    # output in dist/
 ```
 
+## Design mockups (dev only)
+
+`npm run dev`, then open http://localhost:4321/mockups/ to compare the two full mockup sites (Stilte, Wortel) with the current draft. Pick a design (keys 1–3) and a page; switching design keeps the page. D/M toggles desktop/mobile width.
+The files live in `public/mockups/`; an integration in `astro.config.mjs` removes them from `dist/` after every build, so they never go live.
+
 ## Go live (one-time)
 
 1. **Domain**: register `sigridruttyn.be` at a Belgian registrar (Cloudflare Registrar does not sell `.be`), e.g. Combell, Versio, one.com – roughly €5–15/year.
