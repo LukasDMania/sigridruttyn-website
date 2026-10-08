@@ -1,0 +1,153 @@
+---
+import { navigation } from '../data/navigation';
+import site from '../data/site.json';
+
+const current = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? current === '/' : current.startsWith(href));
+---
+
+<header class="site-header">
+  <div class="wrap header-inner" style="max-width: 1280px">
+    <a href="/" class="brand">
+      <span class="brand-name">{site.name}</span>
+      <span class="brand-sub">Kinesist &amp; lichaamswerker</span>
+    </a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">
+      <span class="menu-bars" aria-hidden="true"></span>
+      <span class="sr-only">Menu</span>
+    </button>
+    <nav id="site-nav" class="site-nav" aria-label="Hoofdmenu">
+      <ul>
+        {navigation.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[{ 'nav-cta': item.cta }]}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    nav?.classList.toggle('is-open', !open);
+  });
+</script>
+
+<style>
+  .site-header {
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 22px;
+    padding-bottom: 14px;
+    gap: 14px;
+  }
+  .brand { text-decoration: none; text-align: center; color: inherit; }
+  .brand-name {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--donker-olijf);
+  }
+  .brand-sub {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--olijfblad);
+  }
+  .site-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px 22px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.74rem;
+    font-weight: 450;
+    color: var(--text);
+    padding: 6px 0;
+    border-bottom: 1px solid transparent;
+  }
+  .site-nav a:hover,
+  .site-nav a[aria-current='page'] { color: var(--diep-olijf); border-bottom-color: var(--olijfblad); }
+  .site-nav a.nav-cta {
+    background: var(--diep-olijf);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 0;
+  }
+  .site-nav a.nav-cta:hover,
+  .site-nav a.nav-cta[aria-current='page'] { background: var(--donker-olijf); color: #fff; }
+
+  .menu-toggle { display: none; }
+
+  @media (max-width: 960px) {
+    .header-inner {
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+    .brand { text-align: left; }
+    .brand-name { font-size: 1.6rem; }
+    .menu-toggle {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .menu-bars,
+    .menu-bars::before,
+    .menu-bars::after {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: var(--donker-olijf);
+      position: relative;
+    }
+    .menu-bars::before, .menu-bars::after { content: ''; position: absolute; left: 0; }
+    .menu-bars::before { top: -6px; }
+    .menu-bars::after { top: 6px; }
+    .site-nav { display: none; width: 100%; }
+    .site-nav.is-open { display: block; }
+    .site-nav ul { flex-direction: column; align-items: stretch; gap: 0; padding: 8px 0 4px; }
+    .site-nav li { border-top: 1px solid var(--line); }
+    .site-nav a { display: block; padding: 13px 0; font-size: 0.8rem; border-bottom: 0; }
+    .site-nav a.nav-cta { margin-top: 12px; text-align: center; padding: 13px 16px; }
+    .site-nav li:last-child { border-top: 0; }
+  }
+</style>

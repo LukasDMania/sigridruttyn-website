@@ -1,0 +1,58 @@
+# Pages CMS (https://pagescms.org) – lets Sigrid edit texts in the browser.
+media:
+  input: public/images
+  output: /images
+
+content:
+  - name: pages
+    label: Pagina's
+    type: collection
+    path: src/content/pages
+    format: yaml-frontmatter
+    view:
+      fields: [title]
+    fields:
+      - { name: title, label: Titel, type: string, required: true }
+      - { name: subtitle, label: Ondertitel, type: string }
+      - { name: summary, label: "Korte tekst (kaartje op de startpagina)", type: text }
+      - { name: image, label: Foto, type: image }
+      - { name: imageAlt, label: "Omschrijving foto (voor slechtzienden)", type: string }
+      - { name: isTreatment, label: "Is een behandeling (toont op startpagina en bij tarieven)", type: boolean }
+      - { name: order, label: "Volgorde behandelingen", type: number }
+      - { name: duration, label: Duur, type: string }
+      - { name: price, label: "Prijs per sessie", type: string }
+      - { name: showBookingButton, label: "Toon 'Plan je afspraak'-kader", type: boolean }
+      - { name: body, label: Tekst, type: rich-text }
+
+  - name: site
+    label: Contactgegevens & algemeen
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - { name: name, label: Naam, type: string }
+      - { name: tagline, label: Slogan, type: string }
+      - { name: practice, label: Praktijk, type: string }
+      - { name: street, label: "Straat + nummer", type: string }
+      - { name: postalCode, label: Postcode, type: string }
+      - { name: city, label: Gemeente, type: string }
+      - { name: phone, label: Telefoon, type: string }
+      - { name: email, label: E-mail, type: string }
+      - { name: calendlyUrl, label: "Calendly-link (bv. https://calendly.com/sigridruttyn)", type: string }
+      - { name: paymentMethods, label: Betaalwijze, type: text }
+      - { name: cancellationPolicy, label: Annuleringsvoorwaarden, type: text }
+
+  - name: reviews
+    label: Ervaringen van klanten
+    type: file
+    path: src/data/reviews.json
+    format: json
+    fields:
+      - name: reviews
+        label: Ervaringen
+        type: object
+        list: true
+        fields:
+          - { name: title, label: "Titel (optioneel)", type: string }
+          - { name: text, label: Tekst, type: text }
+          - { name: name, label: Naam, type: string }

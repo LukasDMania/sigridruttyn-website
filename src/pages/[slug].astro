@@ -1,0 +1,102 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import BookingCard from '../components/BookingCard.astro';
+import Placeholder from '../components/Placeholder.astro';
+import site from '../data/site.json';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+const d = page.data;
+
+const isPracticalInfo = page.id === 'praktische-info';
+const treatments = isPracticalInfo
+  ? (await getCollection('pages', (p) => p.data.isTreatment)).sort((a, b) => a.data.order - b.data.order)
+  : [];
+const hasAside = d.isTreatment || page.id === 'wie-ben-ik' || Boolean(d.image);
+---
+
+<Base title={d.title} description={d.summary ?? d.subtitle}>
+  <PageHero title={d.title} subtitle={d.subtitle} />
+
+  <section class="section">
+    <div class:list={['wrap', 'page-grid', { 'has-aside': hasAside }]}>
+      <article class="prose">
+        {isPracticalInfo && (
+          <>
+            <h2 style="margin-top:0">Tarieven</h2>
+            <div class="rates">
+              {treatments.map((t) => (
+                <a class="rate" href={`/${t.id}/`}>
+                  <span class="rate-title">{t.data.title}</span>
+                  <span class="rate-meta">{t.data.duration}</span>
+                  <span class="rate-price">{t.data.price}</span>
+                </a>
+              ))}
+            </div>
+            <h2>Betaalwijze</h2>
+            <p>{site.paymentMethods}</p>
+            <h2>Annuleringsvoorwaarden</h2>
+            <p>{site.cancellationPolicy}</p>
+          </>
+        )}
+        <Content />
+        {isPracticalInfo && <p><a class="btn" href="/plan-je-afspraak/">Plan je afspraak</a></p>}
+      </article>
+
+      {hasAside && (
+        <div class="aside">
+          {d.image ? (
+            <img src={d.image} alt={d.imageAlt ?? ''} class="page-image" loading="lazy" />
+          ) : (
+            <Placeholder tone={d.isTreatment ? 'sand' : 'sage'} />
+          )}
+          {d.showBookingButton && <BookingCard duration={d.duration} price={d.price} />}
+        </div>
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-grid { display: grid; gap: 48px; }
+  .page-grid.has-aside { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; }
+  .aside { display: grid; gap: 24px; position: sticky; top: 150px; }
+  .page-image { border-radius: var(--radius); aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
+
+  .rates { display: grid; gap: 12px; margin-bottom: 1.5em; }
+  .rate {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px 16px;
+    padding: 18px 22px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .rate:hover { border-color: var(--jonge-olijf); }
+  .rate-title { font-family: var(--font-heading); font-size: 1.4rem; color: var(--donker-olijf); }
+  .rate-meta { grid-column: 1; font-size: 0.92rem; color: var(--text-muted); }
+  .rate-price {
+    grid-column: 2; grid-row: 1 / span 2; align-self: center;
+    font-family: var(--font-heading); font-size: 1.7rem; color: var(--diep-olijf);
+  }
+
+  @media (max-width: 900px) {
+    .page-grid.has-aside { grid-template-columns: 1fr; }
+    .aside { position: static; order: -1; grid-template-columns: 1fr; }
+    .aside :global(.placeholder), .page-image { aspect-ratio: 16 / 9; }
+  }
+  @media (min-width: 600px) and (max-width: 900px) {
+    .aside:has(.booking-card) { grid-template-columns: 1fr 1fr; }
+    .aside:has(.booking-card) :global(.placeholder), .aside:has(.booking-card) .page-image { aspect-ratio: auto; height: 100%; }
+  }
+</style>

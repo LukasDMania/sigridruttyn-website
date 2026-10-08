@@ -1,0 +1,47 @@
+---
+import site from '../data/site.json';
+const telHref = 'tel:+32' + site.phone.replace(/\s/g, '').replace(/^0/, '');
+---
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p class="footer-line">
+      <strong>{site.name}</strong>
+      <span class="sep" aria-hidden="true">·</span>
+      <span>{site.practice} – {site.street}, {site.postalCode} {site.city}</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href={telHref}>{site.phone}</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+    <p class="footer-small">
+      © {new Date().getFullYear()} {site.name} · <a href="/privacy/">Privacyverklaring</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--donker-olijf);
+    color: var(--zachte-salie);
+    padding: 34px 0 26px;
+    font-size: 0.95rem;
+  }
+  .footer-inner { text-align: center; }
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 12px;
+    margin-bottom: 14px;
+  }
+  .footer-line strong { color: #fff; font-weight: 500; }
+  .site-footer a { color: var(--zandsteen); }
+  .site-footer a:hover { color: #fff; }
+  .sep { opacity: 0.5; }
+  .footer-small { font-size: 0.8rem; opacity: 0.75; margin: 0; }
+  @media (max-width: 640px) {
+    .footer-line { flex-direction: column; }
+    .sep { display: none; }
+  }
+</style>

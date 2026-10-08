@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import site from '../data/site.json';
+
+const telHref = 'tel:+32' + site.phone.replace(/\s/g, '').replace(/^0/, '');
+---
+
+<Base title="Plan je afspraak" description={`Plan online een afspraak bij ${site.name} in ${site.city}.`}>
+  <PageHero title="Plan je afspraak" subtitle="Kies hieronder een moment dat jou past" />
+
+  <section class="section">
+    <div class="wrap">
+      <p class="privacy-note">
+        Door een afspraak te plannen ga je akkoord met de verwerking van je gegevens zoals beschreven in mijn{' '}
+        <a href="/privacy/">privacyverklaring</a>. {site.cancellationPolicy}
+      </p>
+
+      {site.calendlyUrl ? (
+        <>
+          <div
+            class="calendly-inline-widget"
+            data-url={`${site.calendlyUrl}?hide_gdpr_banner=1&primary_color=4a5a27`}
+          ></div>
+          <script is:inline src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        </>
+      ) : (
+        <div class="fallback">
+          <p>Online plannen is binnenkort mogelijk. Neem intussen gerust contact op:</p>
+          <p>
+            <a class="btn" href={telHref}>Bel {site.phone}</a>
+            <a class="btn btn--ghost" href={`mailto:${site.email}`}>Mail mij</a>
+          </p>
+        </div>
+      )}
+
+      <p class="contact">
+        Liever eerst even praten? Bel <a href={telHref}>{site.phone}</a> of mail naar{' '}
+        <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .privacy-note {
+    max-width: 70ch;
+    background: var(--zandsteen);
+    border-radius: 14px;
+    padding: 18px 22px;
+    font-size: 0.95rem;
+  }
+  .calendly-inline-widget { min-width: 320px; height: 760px; margin: 32px 0; }
+  .fallback {
+    margin: 32px 0;
+    padding: 40px 28px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .fallback .btn { margin: 6px; }
+  .contact { color: var(--text-muted); }
+</style>
