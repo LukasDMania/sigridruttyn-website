@@ -1,19 +1,13 @@
 ---
-// List of treatments with a preview image that follows the cursor (desktop).
+// List of treatments.
 import type { CollectionEntry } from 'astro:content';
-interface Props { items: CollectionEntry<'pages'>[]; all: CollectionEntry<'pages'>[] }
-const { items, all } = Astro.props;
-const tone = (id: string) => all.findIndex((t) => t.id === id);
-const tones = [
-  'radial-gradient(90% 70% at 30% 30%,#dfe4cc,transparent 60%),radial-gradient(80% 80% at 80% 90%,#7b8c4f,transparent 60%),#b9b49a',
-  'radial-gradient(90% 70% at 70% 20%,#efe7d6,transparent 60%),radial-gradient(80% 80% at 20% 90%,#b7a98f,transparent 60%),#d9cfbd',
-  'radial-gradient(90% 70% at 40% 70%,#c5cfaa,transparent 60%),radial-gradient(80% 80% at 80% 10%,#4a5a27,transparent 60%),#a3ae7c',
-];
+interface Props { items: CollectionEntry<'pages'>[] }
+const { items } = Astro.props;
 ---
 
 <div class="rows">
   {items.map((t) => (
-    <a class="row" href={`/${t.id}/`} data-tone={tone(t.id)}>
+    <a class="row" href={`/${t.id}/`}>
       <h3>{t.data.title}</h3>
       <p>{t.data.summary}</p>
       <div class="meta">
@@ -22,12 +16,5 @@ const tones = [
         <span class="arrow" aria-hidden="true">→</span>
       </div>
     </a>
-  ))}
-</div>
-<div class="follow" id="follow" aria-hidden="true">
-  {all.map((t, i) => (
-    t.data.image
-      ? <div class="ph" style={i ? 'opacity:0' : ''}><img src={t.data.image} alt="" style="width:100%;height:100%;object-fit:cover" /></div>
-      : <div class="ph" data-label={t.data.title} style={`${i ? 'opacity:0;' : ''}background:${tones[i % 3]}`}><span class="grain"></span></div>
   ))}
 </div>

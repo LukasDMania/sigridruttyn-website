@@ -55,7 +55,7 @@ const n = d.factors.length;
       <section class="treat">
         <div class="wrap">
           <div class="sec-head"><div><p class="eyebrow">Behandelingen</p><h2 class="split">Waarmee ik werk</h2></div></div>
-          <TreatmentRows items={treatments} all={treatments} />
+          <TreatmentRows items={treatments} />
         </div>
       </section>
       <Cta />
@@ -124,7 +124,7 @@ const n = d.factors.length;
       <section class="treat others">
         <div class="wrap">
           <div class="sec-head"><div><p class="eyebrow">Andere behandelingen</p><h2 class="split">Ook bij mij terecht voor</h2></div></div>
-          <TreatmentRows items={treatments.filter((t) => t.id !== page.id)} all={treatments} />
+          <TreatmentRows items={treatments.filter((t) => t.id !== page.id)} />
         </div>
       </section>
       <Cta />

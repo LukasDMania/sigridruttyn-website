@@ -188,20 +188,6 @@ function initMotion() {
     b.addEventListener('mouseleave', () => { xTo(0); yTo(0); });
   });
 
-  /* Image preview that follows the cursor over the treatment rows */
-  const follow = $('#follow');
-  if (follow && fine) {
-    const fx = gsap.quickTo(follow, 'left', { duration: 0.7, ease: 'power3' });
-    const fy = gsap.quickTo(follow, 'top', { duration: 0.7, ease: 'power3' });
-    const imgs = $$('.ph', follow);
-    $$('.row[data-tone]').forEach((r) => {
-      r.addEventListener('mouseenter', () => { imgs.forEach((im, i) => (im.style.opacity = i == r.dataset.tone ? '1' : '0')); gsap.to(follow, { opacity: 1, scale: 1, duration: 0.5, ease: 'power3.out' }); });
-      r.addEventListener('mouseleave', () => gsap.to(follow, { opacity: 0, scale: 0.6, duration: 0.4 }));
-    });
-    addEventListener('mousemove', (e) => { fx(e.clientX + 160); fy(e.clientY); });
-    addEventListener('scroll', () => { if (!$('.row[data-tone]:hover')) gsap.to(follow, { opacity: 0, scale: 0.6, duration: 0.3, overwrite: 'auto' }); }, { passive: true });
-  }
-
   /* Reviews: autoplay with progress bars */
   const slides = $$('.rv');
   const bars = $$('#rvCtrl b');
