@@ -1,38 +1,13 @@
 ---
-interface Props { duration?: string; price?: string }
-const { duration, price } = Astro.props;
+interface Props { duration?: string; durationLong?: string; price?: string }
+const { duration, durationLong, price } = Astro.props;
 ---
 
-<aside class="booking-card">
+<aside class="bcard">
   <p class="eyebrow">Praktisch</p>
-  {duration && (
-    <div class="row"><span class="label">Duur</span><span>{duration}</span></div>
-  )}
-  {price && (
-    <div class="row"><span class="label">Prijs per sessie</span><span class="price">{price}</span></div>
-  )}
-  <a class="btn" href="/plan-je-afspraak/">Plan je afspraak</a>
+  {duration && <div class="bc-row"><span>Duur</span><b>{duration}</b></div>}
+  {price && <div class="bc-row"><span>Prijs per sessie</span><b class="bc-price">{price}</b></div>}
+  {durationLong && <p class="bc-note">{durationLong}</p>}
+  <a class="btn magnetic" href="/plan-je-afspraak/">Plan je afspraak <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" /></svg></a>
+  <a class="bc-link" href="/praktische-info/">Praktische info →</a>
 </aside>
-
-<style>
-  .booking-card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 28px;
-  }
-  .row {
-    display: flex;
-    flex-direction: column;
-    padding: 12px 0;
-    border-top: 1px solid var(--line);
-  }
-  .label {
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-  .price { font-family: var(--font-heading); font-size: 1.9rem; color: var(--donker-olijf); line-height: 1.2; }
-  .btn { margin-top: 18px; width: 100%; text-align: center; }
-</style>

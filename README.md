@@ -13,9 +13,13 @@ Static site built with [Astro](https://astro.build), hosted on Cloudflare Pages,
 | Client reviews | `src/data/reviews.json` |
 | Menu | `src/data/navigation.ts` |
 | Colours & fonts | `src/styles/global.css` (`:root`) |
+| Animations (smooth scroll, page transitions, breathing exercise) | `src/scripts/site.js` (GSAP + Lenis) |
+| Home page headline & statement | `src/data/site.json` (`homeTitle`, `homeStatement`; `*woorden*` = cursief) |
 | Photos | `public/images/` – set `image: /images/foto.jpg` in a page |
 
-Prices and durations live once, in each treatment's front matter, and appear on the treatment page, the home page cards and the tarieven list.
+Prices and durations live once, in each treatment's front matter, and appear on the treatment page, the home page rows and the tarieven list.
+Treatment pages can show optional blocks from their front matter: principles, steps, complaints, factors, a note and the preparation list (from `praktische-info.md`).
+Everything works without JavaScript and respects "reduce motion"; the animations are an extra layer.
 
 ## Develop
 
@@ -24,11 +28,6 @@ npm install
 npm run dev      # http://localhost:4321
 npm run build    # output in dist/
 ```
-
-## Design mockups (dev only)
-
-`npm run dev`, then open http://localhost:4321/mockups/ to compare the two full mockup sites (Stilte, Wortel) with the current draft. Pick a design (keys 1–3) and a page; switching design keeps the page. D/M toggles desktop/mobile width.
-The files live in `public/mockups/`; an integration in `astro.config.mjs` removes them from `dist/` after every build, so they never go live.
 
 ## Go live (one-time)
 

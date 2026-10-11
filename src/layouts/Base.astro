@@ -7,17 +7,20 @@ import site from '../data/site.json';
 interface Props {
   title?: string;
   description?: string;
+  /** Show the name animation on the first visit (home page only). */
+  loader?: boolean;
 }
-const { title, description = `${site.name} – ${site.tagline}. ${site.practice}, ${site.city}.` } = Astro.props;
+const { title, description = `${site.name} – ${site.tagline}. ${site.practice}, ${site.city}.`, loader = false } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Kinesist & lichaamswerker in ${site.city}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/images/sigrid.jpg', Astro.site);
 ---
 
 <!doctype html>
 <html lang="nl-BE">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -26,13 +29,30 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
     <meta property="og:locale" content="nl_BE" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('is-entering');
+      // Safety net: never leave the page covered if the script fails to load.
+      setTimeout(function () { if (!window.__siteReady) document.documentElement.classList.remove('is-entering'); }, 2500);
+    </script>
   </head>
   <body>
+    <div class="pt" aria-hidden="true"><span class="pt-mark">{site.name}</span></div>
+    {loader && (
+      <div class="loader" aria-hidden="true">
+        <div class="loader-name" id="loaderName">{site.name}</div>
+        <div class="loader-bar"></div>
+      </div>
+    )}
     <Header />
-    <main>
+    <main id="top">
       <slot />
     </main>
     <Footer />
+    <script>
+      import '../scripts/site.js';
+    </script>
   </body>
 </html>

@@ -1,0 +1,32 @@
+---
+// Interactive breathing exercise: three rounds of 4 counts in, 2 hold, 6 out.
+---
+
+<section class="breath" id="adem">
+  <div class="wrap breath-grid">
+    <div class="breath-txt">
+      <p class="eyebrow">Even vertragen</p>
+      <h2 class="split">Neem drie bewuste <em>ademhalingen</em></h2>
+      <p class="fade">Ademwerk is een vast onderdeel van elke sessie lichaamswerk. Probeer het hier even: volg de cirkel en adem mee.</p>
+      <ol class="breath-legend fade" aria-hidden="true">
+        <li data-ph="in"><b>4</b> tellen in</li>
+        <li data-ph="hold"><b>2</b> vasthouden</li>
+        <li data-ph="out"><b>6</b> tellen uit</li>
+      </ol>
+      <div class="actions fade">
+        <button class="btn magnetic" type="button" id="breathBtn">Start <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" /></svg></button>
+      </div>
+    </div>
+    <div class="orb-wrap fade">
+      <svg class="orb-progress" viewBox="0 0 200 200" aria-hidden="true">
+        <circle class="track" cx="100" cy="100" r="96"></circle>
+        <circle class="bar" id="breathBar" cx="100" cy="100" r="96" pathLength="100"></circle>
+      </svg>
+      <span class="orb-ring"></span>
+      <span class="orb" id="orb"></span>
+      <span class="orb-label"><span class="orb-text" id="orbText">Klaar?</span><span class="orb-count" id="orbCount"></span></span>
+      <div class="breath-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="sr-only" id="breathLive" aria-live="polite"></p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+---
+import { inline } from '../lib/text';
+interface Props { title?: string; text?: string }
+const {
+  title = 'Zin om *kennis* te maken?',
+  text = 'Kies online een moment dat jou past, of neem gerust eerst contact op.',
+} = Astro.props;
+---
+
+<section class="cta">
+  <span class="ring" style="width:60vmax;height:60vmax"></span>
+  <span class="ring" style="width:85vmax;height:85vmax"></span>
+  <div class="wrap">
+    <p class="eyebrow" style="color:var(--salie)">Plan je afspraak</p>
+    <h2 class="split" style="margin-top:20px" set:html={inline(title)} />
+    <p>{text}</p>
+    <a class="btn magnetic" href="/plan-je-afspraak/">Bekijk de agenda <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" /></svg></a>
+  </div>
+</section>

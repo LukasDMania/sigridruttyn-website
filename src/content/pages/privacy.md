@@ -25,6 +25,10 @@ Sigrid Ruttyn, Kaleidoscoop, Molenstraat 50, 2640 Mortsel — sigridruttyn@gmail
 
 Gezondheidsgegevens verwerk ik enkel in het kader van de zorgverlening en met respect voor het beroepsgeheim.
 
+## Toestemming bij het boeken
+
+Wanneer je online een afspraak maakt, bevestig je met een vinkje dat je deze privacyverklaring en het toestemmingsformulier gelezen hebt en ermee akkoord gaat. Na het boeken ontvang je per e-mail het toestemmingsformulier dat bij jouw behandeling hoort.
+
 ## Online afspraken
 
 Voor het online plannen van afspraken gebruik ik Calendly. De gegevens die je daar invult (naam, e-mailadres, telefoonnummer en eventuele opmerkingen) worden door Calendly verwerkt in mijn opdracht. Calendly kan daarbij cookies plaatsen. Meer info vind je in de [privacyverklaring van Calendly](https://calendly.com/privacy). Vermeld bij het boeken bij voorkeur geen uitgebreide medische informatie; dat bespreken we liever tijdens de sessie.

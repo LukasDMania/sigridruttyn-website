@@ -1,0 +1,21 @@
+---
+// A photo with a reveal + parallax effect. Without a photo it shows a soft
+// coloured placeholder, so the page still looks finished.
+interface Props { src?: string; alt?: string; label?: string; tone?: number; class?: string }
+const { src, alt = '', label = 'Foto volgt', tone = 0, class: cls = '' } = Astro.props;
+const tones = [
+  'radial-gradient(90% 70% at 30% 30%,#dfe4cc,transparent 60%),radial-gradient(80% 80% at 80% 90%,#7b8c4f,transparent 60%),#b9b49a',
+  'radial-gradient(90% 70% at 70% 20%,#efe7d6,transparent 60%),radial-gradient(80% 80% at 20% 90%,#b7a98f,transparent 60%),#d9cfbd',
+  'radial-gradient(90% 70% at 40% 70%,#c5cfaa,transparent 60%),radial-gradient(80% 80% at 80% 10%,#4a5a27,transparent 60%),#a3ae7c',
+];
+---
+
+{src ? (
+  <div class:list={['ph', 'photo', 'reveal-img', cls]}>
+    <img class="inner parallax" src={src} alt={alt} width="1200" height="1600" />
+  </div>
+) : (
+  <div class:list={['ph', 'reveal-img', cls]} data-label={label} style={`background:${tones[tone % 3]}`} aria-hidden="true">
+    <div class="inner ph parallax" style="background:inherit"><span class="grain"></span></div>
+  </div>
+)}

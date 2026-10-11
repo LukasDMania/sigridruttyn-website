@@ -1,102 +1,140 @@
 ---
-import { getCollection, render } from 'astro:content';
+// Treatment pages, "Wie ben ik?" and the privacy statement, all from src/content/pages/*.md
+import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
 import BookingCard from '../components/BookingCard.astro';
-import Placeholder from '../components/Placeholder.astro';
-import site from '../data/site.json';
+import TreatmentRows from '../components/TreatmentRows.astro';
+import Reviews from '../components/Reviews.astro';
+import Cta from '../components/Cta.astro';
+import { inline } from '../lib/text';
 
 export async function getStaticPaths() {
-  const pages = await getCollection('pages');
+  // These pages have their own file in src/pages/
+  const own = ['praktische-info'];
+  const pages = await getCollection('pages', (p) => !own.includes(p.id));
   return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
 }
 
 const { page } = Astro.props;
 const { Content } = await render(page);
 const d = page.data;
+const treatments = (await getCollection('pages', (p) => p.data.isTreatment)).sort((a, b) => a.data.order - b.data.order);
+const tone = Math.max(0, treatments.findIndex((t) => t.id === page.id));
+const isAbout = page.id === 'wie-ben-ik';
 
-const isPracticalInfo = page.id === 'praktische-info';
-const treatments = isPracticalInfo
-  ? (await getCollection('pages', (p) => p.data.isTreatment)).sort((a, b) => a.data.order - b.data.order)
-  : [];
-const hasAside = d.isTreatment || page.id === 'wie-ben-ik' || Boolean(d.image);
+let Preparation = null;
+if (d.showPreparation) {
+  const prac = await getEntry('pages', 'praktische-info');
+  if (prac) Preparation = (await render(prac)).Content;
+}
+const n = d.factors.length;
 ---
 
 <Base title={d.title} description={d.summary ?? d.subtitle}>
-  <PageHero title={d.title} subtitle={d.subtitle} />
-
-  <section class="section">
-    <div class:list={['wrap', 'page-grid', { 'has-aside': hasAside }]}>
-      <article class="prose">
-        {isPracticalInfo && (
-          <>
-            <h2 style="margin-top:0">Tarieven</h2>
-            <div class="rates">
-              {treatments.map((t) => (
-                <a class="rate" href={`/${t.id}/`}>
-                  <span class="rate-title">{t.data.title}</span>
-                  <span class="rate-meta">{t.data.duration}</span>
-                  <span class="rate-price">{t.data.price}</span>
-                </a>
-              ))}
-            </div>
-            <h2>Betaalwijze</h2>
-            <p>{site.paymentMethods}</p>
-            <h2>Annuleringsvoorwaarden</h2>
-            <p>{site.cancellationPolicy}</p>
-          </>
-        )}
-        <Content />
-        {isPracticalInfo && <p><a class="btn" href="/plan-je-afspraak/">Plan je afspraak</a></p>}
-      </article>
-
-      {hasAside && (
-        <div class="aside">
-          {d.image ? (
-            <img src={d.image} alt={d.imageAlt ?? ''} class="page-image" loading="lazy" />
-          ) : (
-            <Placeholder tone={d.isTreatment ? 'sand' : 'sage'} />
-          )}
-          {d.showBookingButton && <BookingCard duration={d.duration} price={d.price} />}
+  {isAbout ? (
+    <>
+      <PageHero eyebrow={d.eyebrow} title="Kinesist en lichaamswerker" lead={d.subtitle}>
+        <Photo src={d.image} alt={d.imageAlt} class="portrait" />
+      </PageHero>
+      <section class="essay">
+        <div class="wrap essay-grid">
+          <aside class="essay-side fade">
+            <p class="eyebrow">Sigrid Ruttyn</p>
+            <ul class="facts">{d.facts.map((f) => <li><span>{f.label}</span>{f.value}</li>)}</ul>
+          </aside>
+          <div class="prose about-prose"><Content /></div>
         </div>
+      </section>
+      {d.quote && (
+        <section class="goal">
+          <div class="wrap"><p class="lit-text">{d.quote}</p></div>
+        </section>
       )}
-    </div>
-  </section>
+      <section class="treat">
+        <div class="wrap">
+          <div class="sec-head"><div><p class="eyebrow">Behandelingen</p><h2 class="split">Waarmee ik werk</h2></div></div>
+          <TreatmentRows items={treatments} all={treatments} />
+        </div>
+      </section>
+      <Cta />
+    </>
+  ) : d.isTreatment ? (
+    <>
+      <PageHero eyebrow={d.eyebrow} title={d.title.split(':')[0]} lead={d.subtitle} chips={[d.duration, d.price && `${d.price} per sessie`].filter(Boolean) as string[]}>
+        <Photo src={d.image} alt={d.imageAlt} label={`Foto: ${d.title.split(':')[0].toLowerCase()}`} tone={tone} />
+      </PageHero>
+
+      <section class="tbody">
+        <div class="wrap tgrid">
+          <div class="prose">
+            <Content />
+
+            {d.principles.length > 0 && (
+              <>
+                <h2 class="split">Twee kernprincipes</h2>
+                {d.principlesIntro && <p class="fade" set:html={inline(d.principlesIntro)} />}
+                <div class="duo">
+                  {d.principles.map((p) => <div class="duo-card fade"><span class="duo-word">{p.title}</span><p>{p.text}</p></div>)}
+                </div>
+              </>
+            )}
+
+            {d.factors.length > 0 && (
+              <div class="orbit fade" aria-label="Factoren die meespelen">
+                <div class="orbit-ring">
+                  {d.factors.map((f, i) => <span class="orbit-item" style={`--i:${i};--n:${n}`}><span>{f}</span></span>)}
+                </div>
+                <span class="orbit-core">{d.factorsCenter}</span>
+              </div>
+            )}
+
+            {d.steps.length > 0 && (
+              <>
+                {d.stepsTitle && <h2 class="split">{d.stepsTitle}</h2>}
+                {d.stepsIntro && <p class="fade">{d.stepsIntro}</p>}
+                <ol class:list={['steps', { numbered: d.stepsNumbered }]}>
+                  <span class="steps-line"><b></b></span>
+                  {d.steps.map((s, i) => (
+                    <li class="step"><span class="step-n">{d.stepsNumbered ? i + 1 : ['Eerst', 'Dan', 'Tot slot'][i] ?? i + 1}</span><h3>{s.title}</h3><p>{s.text}</p></li>
+                  ))}
+                </ol>
+              </>
+            )}
+
+            {d.complaints.length > 0 && (
+              <>
+                {d.complaintsTitle && <h2 class="split">{d.complaintsTitle}</h2>}
+                {d.complaintsIntro && <p class="fade">{d.complaintsIntro}</p>}
+                <ul class="complaints">{d.complaints.map((c) => <li>{c}</li>)}</ul>
+              </>
+            )}
+
+            {d.closing && <p class="fade">{d.closing}</p>}
+            {d.note && <div class="callout fade"><b>Goed om te weten</b><p>{d.note}</p></div>}
+            {Preparation && <div class="prep-block"><Preparation /></div>}
+          </div>
+          <BookingCard duration={d.duration} durationLong={d.durationLong} price={d.price} />
+        </div>
+      </section>
+
+      {d.showReviews && <Reviews limit={1} treatment={page.id} />}
+
+      <section class="treat others">
+        <div class="wrap">
+          <div class="sec-head"><div><p class="eyebrow">Andere behandelingen</p><h2 class="split">Ook bij mij terecht voor</h2></div></div>
+          <TreatmentRows items={treatments.filter((t) => t.id !== page.id)} all={treatments} />
+        </div>
+      </section>
+      <Cta />
+    </>
+  ) : (
+    <>
+      <PageHero eyebrow={d.eyebrow ?? d.title} title={d.title} lead={d.subtitle} />
+      <section class="tbody">
+        <div class="wrap"><div class="prose legal"><Content /></div></div>
+      </section>
+    </>
+  )}
 </Base>
-
-<style>
-  .page-grid { display: grid; gap: 48px; }
-  .page-grid.has-aside { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; }
-  .aside { display: grid; gap: 24px; position: sticky; top: 150px; }
-  .page-image { border-radius: var(--radius); aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
-
-  .rates { display: grid; gap: 12px; margin-bottom: 1.5em; }
-  .rate {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 2px 16px;
-    padding: 18px 22px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    text-decoration: none;
-    color: var(--text);
-  }
-  .rate:hover { border-color: var(--jonge-olijf); }
-  .rate-title { font-family: var(--font-heading); font-size: 1.4rem; color: var(--donker-olijf); }
-  .rate-meta { grid-column: 1; font-size: 0.92rem; color: var(--text-muted); }
-  .rate-price {
-    grid-column: 2; grid-row: 1 / span 2; align-self: center;
-    font-family: var(--font-heading); font-size: 1.7rem; color: var(--diep-olijf);
-  }
-
-  @media (max-width: 900px) {
-    .page-grid.has-aside { grid-template-columns: 1fr; }
-    .aside { position: static; order: -1; grid-template-columns: 1fr; }
-    .aside :global(.placeholder), .page-image { aspect-ratio: 16 / 9; }
-  }
-  @media (min-width: 600px) and (max-width: 900px) {
-    .aside:has(.booking-card) { grid-template-columns: 1fr 1fr; }
-    .aside:has(.booking-card) :global(.placeholder), .aside:has(.booking-card) .page-image { aspect-ratio: auto; height: 100%; }
-  }
-</style>

@@ -13,16 +13,52 @@ content:
       fields: [title]
     fields:
       - { name: title, label: Titel, type: string, required: true }
+      - { name: eyebrow, label: "Klein lijntje boven de titel", type: string }
       - { name: subtitle, label: Ondertitel, type: string }
-      - { name: summary, label: "Korte tekst (kaartje op de startpagina)", type: text }
+      - { name: summary, label: "Korte tekst (lijst behandelingen op de startpagina)", type: text }
       - { name: image, label: Foto, type: image }
       - { name: imageAlt, label: "Omschrijving foto (voor slechtzienden)", type: string }
       - { name: isTreatment, label: "Is een behandeling (toont op startpagina en bij tarieven)", type: boolean }
       - { name: order, label: "Volgorde behandelingen", type: number }
-      - { name: duration, label: Duur, type: string }
+      - { name: duration, label: "Duur (kort, bv. 1 uur)", type: string }
+      - { name: durationLong, label: "Duur (uitgebreid, bij tarieven)", type: string }
       - { name: price, label: "Prijs per sessie", type: string }
-      - { name: showBookingButton, label: "Toon 'Plan je afspraak'-kader", type: boolean }
       - { name: body, label: Tekst, type: rich-text }
+      - { name: principlesIntro, label: "Kernprincipes: inleiding", type: string }
+      - name: principles
+        label: Kernprincipes
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Titel, type: string }
+          - { name: text, label: Tekst, type: text }
+      - { name: stepsTitle, label: "Stappen: titel", type: string }
+      - { name: stepsIntro, label: "Stappen: inleiding", type: text }
+      - { name: stepsNumbered, label: "Stappen nummeren (1, 2, 3)", type: boolean }
+      - name: steps
+        label: Stappen
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Titel, type: string }
+          - { name: text, label: Tekst, type: text }
+      - { name: complaintsTitle, label: "Klachten: titel", type: string }
+      - { name: complaintsIntro, label: "Klachten: inleiding", type: string }
+      - { name: complaints, label: Klachten, type: string, list: true }
+      - { name: factorsCenter, label: "Cirkel: tekst in het midden", type: string }
+      - { name: factors, label: "Cirkel: woorden rondom", type: string, list: true }
+      - { name: closing, label: "Slottekst", type: text }
+      - { name: note, label: "Kader 'Goed om te weten'", type: text }
+      - { name: showPreparation, label: "Toon 'Info voor lichaamswerk' (uit Praktische info)", type: boolean }
+      - { name: showReviews, label: "Toon een ervaring van een klant", type: boolean }
+      - { name: quote, label: "Wie ben ik: grote zin onderaan", type: string }
+      - name: facts
+        label: "Wie ben ik: feitjes naast de tekst"
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: value, label: Waarde, type: string }
 
   - name: site
     label: Contactgegevens & algemeen
@@ -32,6 +68,8 @@ content:
     fields:
       - { name: name, label: Naam, type: string }
       - { name: tagline, label: Slogan, type: string }
+      - { name: homeTitle, label: "Startpagina: grote titel (*woorden* = cursief groen)", type: string }
+      - { name: homeStatement, label: "Startpagina: zin onder de titel", type: text }
       - { name: practice, label: Praktijk, type: string }
       - { name: street, label: "Straat + nummer", type: string }
       - { name: postalCode, label: Postcode, type: string }
@@ -56,3 +94,8 @@ content:
           - { name: title, label: "Titel (optioneel)", type: string }
           - { name: text, label: Tekst, type: text }
           - { name: name, label: Naam, type: string }
+          - name: treatment
+            label: "Over welke behandeling? (optioneel)"
+            type: select
+            options:
+              values: [lichaamswerk, allergie-behandeling, toegepaste-kinesiologie]

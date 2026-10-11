@@ -1,0 +1,31 @@
+---
+import reviewData from '../data/reviews.json';
+interface Props { limit?: number; treatment?: string }
+const { limit, treatment } = Astro.props;
+const all = reviewData.reviews.filter((r) => r.text?.trim());
+// On a treatment page, show the reviews about that treatment first.
+const reviews = (treatment ? [...all].sort((a, b) => Number(b.treatment === treatment) - Number(a.treatment === treatment)) : all).slice(0, limit);
+---
+
+{reviews.length > 0 && (
+  <section class="reviews">
+    <div class="wrap">
+      <p class="eyebrow">Ervaringen van klanten</p>
+      <div class="rv-stage" id="rvStage">
+        {reviews.map((r, i) => (
+          <figure class:list={['rv', { 'is-on': i === 0 }]}>
+            <span class="quote-mark" aria-hidden="true">“</span>
+            {r.title && <h3>{r.title}</h3>}
+            <blockquote>{r.text}</blockquote>
+            <cite>{r.name}</cite>
+          </figure>
+        ))}
+      </div>
+      {reviews.length > 1 && (
+        <div class="rv-ctrl" id="rvCtrl">
+          {reviews.map((_, i) => <button type="button" aria-label={`Ervaring ${i + 1}`}><i><b></b></i></button>)}
+        </div>
+      )}
+    </div>
+  </section>
+)}

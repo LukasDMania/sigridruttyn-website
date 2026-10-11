@@ -1,8 +1,21 @@
 ---
 title: Wie ben ik?
-subtitle: Kinesist en lichaamswerker met een fascinatie voor de wijsheid van het lichaam
+eyebrow: Wie ben ik?
+subtitle: Kinesist en lichaamswerker met een fascinatie voor de wijsheid van het lichaam.
 image: /images/sigrid.jpg
 imageAlt: Portret van Sigrid Ruttyn
+quote: Wat probeert het lichaam ons te vertellen?
+facts:
+  - label: Opleiding
+    value: Kinesitherapie
+  - label: Lichaamswerk
+    value: Enrootment Method
+  - label: Allergie
+    value: Total Reset Methode
+  - label: Onderzoek
+    value: Toegepaste kinesiologie
+  - label: Praktijk
+    value: Kaleidoscoop, Mortsel
 ---
 
 Het menselijk lichaam heeft mij altijd enorm geboeid. De keuze voor de opleiding kinesitherapie was dan ook een natuurlijke stap. Tijdens mijn werk als kinesitherapeut ontdekte ik echter dat het behandelen van enkel de lichamelijke klacht niet altijd voldoende is. Soms blijft een klacht terugkomen of voelt het alsof er meer aan de hand is dan wat zich lichamelijk laat zien.
