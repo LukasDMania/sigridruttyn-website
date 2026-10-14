@@ -273,12 +273,8 @@ a.price-card:hover{transform:translateY(-4px)}
 /* about essay */
 .essay{padding-block:clamp(60px,9vw,110px);background:var(--papier)}
 .essay + .statement{padding-block:clamp(60px,9vw,120px)}
-.essay-grid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:clamp(32px,6vw,96px)}
-.facts{list-style:none;padding:0;margin:18px 0 0;display:grid}
-.facts li{padding-block:12px;border-top:1px solid var(--line);font-size:.95rem}
-.facts span{display:block;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.about-prose{margin-inline:auto}
 .dropcap::first-letter{float:left;font:400 5.2rem/.8 var(--serif);color:var(--olijf);margin:8px 12px 0 0}
-@media (max-width:860px){.essay-grid{grid-template-columns:1fr}.essay-side:empty{display:none}}
 
 /* practical */
 .pinfo{background:var(--papier);padding-block:clamp(60px,9vw,110px)}

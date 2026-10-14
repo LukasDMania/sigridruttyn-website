@@ -2,7 +2,7 @@
 title: "Allergie behandeling: Total Reset Methode"
 eyebrow: Total Reset Methode (TRM)
 subtitle: Een natuurlijke en pijnvrije behandelmethode.
-summary: "Een natuurlijke, pijnvrije methode die het lichaam helpt om allergieën, overgevoeligheden en blokkades te elimineren. Voor baby's tot ouderen."
+summary: "Een natuurlijke, pijnvrije methode die het lichaam helpt om allergieën, overgevoeligheden en blokkades te elimineren."
 image: ""
 imageAlt: ""
 isTreatment: true

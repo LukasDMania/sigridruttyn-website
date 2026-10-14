@@ -39,11 +39,7 @@ const n = d.factors.length;
         <Photo src={d.image} alt={d.imageAlt} class="portrait" />
       </PageHero>
       <section class="essay">
-        <div class="wrap essay-grid">
-          <aside class="essay-side fade">
-            <p class="eyebrow">Sigrid Ruttyn</p>
-            <ul class="facts">{d.facts.map((f) => <li><span>{f.label}</span>{f.value}</li>)}</ul>
-          </aside>
+        <div class="wrap">
           <div class="prose about-prose"><Content /></div>
         </div>
       </section>
