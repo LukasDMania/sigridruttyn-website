@@ -63,7 +63,7 @@ a{color:inherit}
 .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,6vw,90px);align-items:end}
 .hero h1{font-size:clamp(2.9rem,7.4vw,6.4rem);letter-spacing:-.01em;margin-block:22px 28px}
 .hero h1 em{color:var(--olijf)}
-.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .12em .08em 0;margin:0 -.12em -.08em 0}
 .wi{display:inline-block}
 .lead{font:italic 400 clamp(1.25rem,2.2vw,1.6rem)/1.45 var(--serif);color:var(--muted);max-width:30ch}
 .actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
